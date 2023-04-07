@@ -10,7 +10,7 @@ body{
     width: 450px;
     border-radius: 3rem;
     margin-top: 40px;
-    height: 370px;
+    height: 390px;
     background-color:azure;
     border-color: red;
 }
@@ -44,4 +44,7 @@ nav{
 ul{
     text-align:end;
     margin-right: 50px;
+}
+#userNotFound{
+    display:none;
 }
