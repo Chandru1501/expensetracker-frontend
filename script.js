@@ -27,7 +27,7 @@ postUser(myObj);
 }
 
 async function postUser(myObj){
- axios.post("http://localhost:8080/admin/add-user",myObj)
+ axios.post("http://localhost:8080/user/add-user",myObj)
  .then((response)=>{
     console.log(response);
     location.replace("/Login.html");
@@ -69,9 +69,12 @@ console.log(myLogin);
 }
 
 async function userLogin(myLogin){
-axios.post('http://localhost:8080/admin/login',myLogin)
+axios.post('http://localhost:8080/user/login',myLogin)
 .then((response)=>{
-    console.log(response);
+    if(response.data.status=="login Successfull"){
+        location.replace('./expenses/expense.html')
+    }
+    // if(response.data)
 })
 .catch((err)=>{
     if(err.response.status==404){
