@@ -7,10 +7,13 @@ if(type.textContent==="SignUp") {
 
 let username = document.querySelector('#username');
 let email = document.querySelector('#email');
+let btn = document.querySelector('#btn');
 let password = document.querySelector('#password');
-let signup = document.querySelector('#btn');
-let userNotFound = document.querySelector('#userNotFound');
+let userFound = document.querySelector('#userFound');
 
+btn.addEventListener('click',()=>{
+userFound.style.display="none";
+})
 function addUser(event){
     event.preventDefault();
 let myObj = {
@@ -24,14 +27,18 @@ postUser(myObj);
 }
 
 async function postUser(myObj){
- let response = await axios.post("http://localhost:8080/admin/add-user",myObj);
- console.log(response.data.duplicate===true);
- if(response.data.duplicate===true){
-    userNotFound.style.display="block";
- }
- else{
-    location.replace("/Login.html")
- }
+ axios.post("http://localhost:8080/admin/add-user",myObj)
+ .then((response)=>{
+    console.log(response);
+    location.replace("/Login.html");
+ })
+ .catch((err)=>{
+  console.log(err.response.status);
+  if(err.response.status==409){
+     userFound.style.display="block";
+  }
+ })
+ 
 }
 
 }
@@ -42,7 +49,14 @@ else if (type.textContent==="Login"){
 
 let userEmail = document.querySelector('#emailLogin');
 let userPassword = document.querySelector('#passwordLogin');
+let Loginbtn = document.querySelector('#Loginbtn');
+let WrongPwd = document.querySelector('#wrongpassword');
+let UserNotFound = document.querySelector('#userNotFound');
 
+Loginbtn.addEventListener('click',()=>{
+    WrongPwd.style.display="none";
+    UserNotFound.style.display="none";
+})
 
 function login(event){
     event.preventDefault();
@@ -55,7 +69,20 @@ console.log(myLogin);
 }
 
 async function userLogin(myLogin){
-    let response = await axios.post('http://localhost:8080/admin/login',myLogin);
+axios.post('http://localhost:8080/admin/login',myLogin)
+.then((response)=>{
     console.log(response);
+})
+.catch((err)=>{
+    if(err.response.status==404){
+        console.log("404 : true");
+        UserNotFound.style.display="block";
+    }
+    if(err.response.status==401){
+        console.log("401 : true");
+        WrongPwd.style.display="block";
+    }
+  })
 }
+
 }

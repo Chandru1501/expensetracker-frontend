@@ -47,6 +47,15 @@ ul{
 }
 #userNotFound{
     display:none;
+    text-align: center;
+    margin-left: -20px;
+}
+#userFound{
+    display:none;
+}
+#wrongpassword{
+     display:none;
+    text-align: center;
 }
 
 #Loginbtn{
