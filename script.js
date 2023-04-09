@@ -71,10 +71,22 @@ console.log(myLogin);
 async function userLogin(myLogin){
 axios.post('http://localhost:8080/user/login',myLogin)
 .then((response)=>{
+    console.log(response);
     if(response.data.status=="login Successfull"){
-        location.replace('./expenses/expense.html')
+        if(localStorage.getItem("token")==null && localStorage.getItem('username')==null){
+            localStorage.setItem("token",response.data.token)
+            localStorage.setItem("username",response.data.username)
+            location.replace('./expenses/expense.html')
+        }
+        else{
+           localStorage.removeItem("token");
+           localStorage.removeItem('username');
+           localStorage.setItem("token",response.data.token)
+           localStorage.setItem("username",response.data.username)
+           location.replace('./expenses/expense.html')
+        }
+        
     }
-    // if(response.data)
 })
 .catch((err)=>{
     if(err.response.status==404){

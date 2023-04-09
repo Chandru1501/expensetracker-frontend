@@ -62,5 +62,8 @@ ul{
     text-align:end;
     margin-right: 50px;
 }
-
+#userWelcome{
+  color:rgb(0, 194, 0);
+  text-align: center;
+}
 
