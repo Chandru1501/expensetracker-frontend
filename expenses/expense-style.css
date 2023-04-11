@@ -13,7 +13,7 @@ body{
  height:390px;
  width: 490px;
  padding: 25px;
- margin-top: 20px;
+ margin-top: 10px;
  background-color:azure;
  border-color: red;
 }
@@ -65,5 +65,14 @@ ul{
 #userWelcome{
   color:rgb(0, 194, 0);
   text-align: center;
+  margin-top: -20px;
+}
+#rzp-button1{
+    margin-top: -30px;
+    margin-left: 20px;
+}
+#premium-text{
+    border:3px solid rgb(8, 39, 214);
+    width: 420px;
 }
 

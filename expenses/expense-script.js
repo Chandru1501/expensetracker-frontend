@@ -48,3 +48,46 @@ async function postexpense(myObj){
     console.log(err);
   }
 }
+
+/// payment
+
+document.querySelector('#rzp-button1').onclick = async function(){
+  let token = localStorage.getItem('token');
+  let response = await axios.get('http://localhost:8080/purchase/premiummembership',{ headers : { "authorization" : token } });
+  console.log(response);
+
+  var options = {
+    "key": response.data.key_id, // Enter the Key ID generated from the Dashboard
+    "order_id": response.data.order.id , //This is a Order ID
+
+    "handler": async function (response) {
+  
+      alert("you are our premium user");
+      await axios.post('http://localhost:8080/purchase/updatetransactionstatus',{
+        payment_Id : response.razorpay_payment_id,
+        order_Id : options.order_id
+      },
+      {headers : {"authorization" : token }}
+    )
+    },
+  }
+
+
+  var rzp1 = new Razorpay(options);
+
+  document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+
+rzp1.on('payment.failed', async function (response){
+  console.log(response.error.metadata);
+        alert("somthing went wrong");
+       await axios.post('http://localhost:8080/purchase/updatefailurestatus',{
+        order_Id : response.error.metadata.order_id,
+        payment_Id : response.error.metadata.payment_id
+      },
+      { headers : { "authorization" : token } })
+});
+
+}
