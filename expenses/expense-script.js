@@ -63,12 +63,14 @@ document.querySelector('#rzp-button1').onclick = async function(){
     "handler": async function (response) {
   
       alert("you are our premium user");
+      location.reload();
       await axios.post('http://localhost:8080/purchase/updatetransactionstatus',{
         payment_Id : response.razorpay_payment_id,
         order_Id : options.order_id
       },
       {headers : {"authorization" : token }}
     )
+    location.reload();
     },
   }
 
@@ -91,3 +93,40 @@ rzp1.on('payment.failed', async function (response){
 });
 
 }
+
+
+
+//before premium
+
+let premiumBtn = document.querySelector('#rzp-button1');
+let premiumtext = document.querySelector('#premium-text');
+let beforePremiumOptions = document.querySelector('.beforePremium');
+
+
+// after premium
+
+let tospacing = document.querySelector('#tospacing');
+let premiumUser = document.querySelector('#premiumUser');
+let afterPremiumOptions = document.querySelector('.afterPremium');
+
+
+
+
+
+document.addEventListener('DOMContentLoaded',( async function (){
+
+  let token = localStorage.getItem('token');
+
+  let response = await axios.get('http://localhost:8080/user/getdetails',{ headers : { "authorization" : token } });
+  // console.log(response.data);
+  if(response.data.isour=='true'){
+    tospacing.style.display="block";
+    afterPremiumOptions.style.display="block";
+    premiumUser.style.display="block";
+  }
+  else{
+    premiumBtn.style.display="block";
+    premiumtext.style.display="block";
+    beforePremiumOptions.style.display="block";
+  }
+}))
