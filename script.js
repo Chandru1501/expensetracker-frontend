@@ -52,6 +52,7 @@ let userPassword = document.querySelector('#passwordLogin');
 let Loginbtn = document.querySelector('#Loginbtn');
 let WrongPwd = document.querySelector('#wrongpassword');
 let UserNotFound = document.querySelector('#userNotFound');
+let forgotPassword = document.querySelector('#forgotPassword');
 
 Loginbtn.addEventListener('click',()=>{
     WrongPwd.style.display="none";
@@ -96,6 +97,36 @@ axios.post('http://localhost:8080/user/login',myLogin)
     if(err.response.status==401){
         console.log("401 : true");
         WrongPwd.style.display="block";
+    }
+  })
+}
+
+}
+
+else if (type.textContent==="Reset Password"){
+//................................Reset Password..........................................
+
+let resetBtn = document.querySelector('#resetBtn');
+let EmailReset = document.querySelector('#emailReset');
+let resetUserNotFound = document.querySelector('#resetUserNotFound');
+
+function resetPw(event){
+    event.preventDefault();
+    resetUserNotFound.style.display="none";
+  let userEmail = EmailReset.value;
+  console.log(userEmail);
+  let resetemail = {
+    Email :  userEmail
+  }
+
+  axios.post('http://localhost:8080/password/forgotpassword',resetemail)
+  .then((response)=>{
+      console.log(response);
+  })
+  .catch(err=>{
+    console.log(err.response.data.status);
+    if(err.response.data.status==="userNotFound"){
+    resetUserNotFound.style.display = "block"
     }
   })
 }
