@@ -103,14 +103,14 @@ axios.post('http://localhost:8080/user/login',myLogin)
 
 }
 
-else if (type.textContent==="Reset Password"){
+else if (type.textContent==="Forgot Password"){
 //................................Reset Password..........................................
 
 let resetBtn = document.querySelector('#resetBtn');
 let EmailReset = document.querySelector('#emailReset');
 let resetUserNotFound = document.querySelector('#resetUserNotFound');
 
-function resetPw(event){
+function resetPw(event)  {
     event.preventDefault();
     resetUserNotFound.style.display="none";
   let userEmail = EmailReset.value;
@@ -118,17 +118,22 @@ function resetPw(event){
   let resetemail = {
     Email :  userEmail
   }
+  
+  postNow(resetemail);
 
-  axios.post('http://localhost:8080/password/forgotpassword',resetemail)
-  .then((response)=>{
-      console.log(response);
-  })
-  .catch(err=>{
+}
+
+async function postNow(resetemail){
+  try{
+  let response = await axios.post('http://localhost:8080/password/forgotpassword',resetemail)
+  console.log(response);
+      alert("Password reseting link has been sent to your mail ID");
+  }
+  catch(err){
     console.log(err.response.data.status);
     if(err.response.data.status==="userNotFound"){
     resetUserNotFound.style.display = "block"
-    }
-  })
-}
-
+         }
+      }
+   }
 }
