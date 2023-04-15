@@ -32,6 +32,9 @@
             <div class="align-self-center">
                 <label for="amount">Enter expense amount</label><br>
                 <input type="Number" id="amount" class="form-control" class="input" name="expenseamount" required/>
+                <label for="income">Enter income amount</label><br>
+                <input type="Number" id="income" class="form-control" placeholder="optional" class="input" name="income">
+                <input type="date" id="dateInput" name="dateInput" required>
             </div>
             <div class="dropdown1">
                 <label for="descriptioninput">Choose description</label><br>
@@ -64,7 +67,7 @@
                 <option>Travel</option>
             </select>
         </div>
-             <input id="submiting" type="submit" value="Add expense" class="btn btn-info" required />
+             <button id="submiting" type="submit" class="btn btn-info">Add expense</button>
             </form>
             
             <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

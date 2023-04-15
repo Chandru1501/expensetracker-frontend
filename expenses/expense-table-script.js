@@ -8,20 +8,12 @@ window.addEventListener("DOMContentLoaded",showOnscreen)
 var username = document.querySelector('name');
 username.textContent = localStorage.getItem('username');
 
-function additem(e){
-    e.preventDefault();
-myObj = {
-    amount: amount.value,
-    description: description.value,
-    category: category.value,
-}
-  postexpense(myObj);
-}
-
 function displayitems(myObj) {
 
 totalAmount.textContent= Number(totalAmount.textContent) + Number(myObj.amount);
 var mydata ={
+  date : myObj.date,
+  income : myObj.income,
   amount : myObj.amount,
   description : myObj.description,
   category : myObj.category
@@ -69,7 +61,6 @@ editbtn.onclick =() => {
 async function showOnscreen(){
   let data = await getAllExpenses();
   let isour = data.headers.isour;
-  // verify(isour);
   data.expense.forEach(expense => {
    displayitems(expense);
     console.log(expense)
@@ -103,62 +94,11 @@ async function deleteExpense(expenseid){
   }
 }
 
-let openCount=0;
-let leaderboardBtn = document.querySelector('#Leaderboardbtn');
-let leaderboardTable = document.querySelector('#Leaderboard');
-let leaderboaedText = document.querySelector('.text-info');
-let premiumFeature = document.querySelector('#premium_feature');
-let HideOrView = document.querySelector("#HideOrView");
-
-leaderboardBtn.addEventListener('click',showORhideLeaderBoard);
-
-async function showORhideLeaderBoard(){
-
-  if(HideOrView.style.display=="none"){
-    HideOrView.style.display="block";
-    leaderboardBtn.textContent="Hide Leaderboard";
-    if(openCount>0){
-      return;
-    }
-    let token = localStorage.getItem("token");
-    console.log(token);
-    let response = await axios.get('http://localhost:8080/premium/get-leaderboard',{headers : { "authorization" : token }})
-    console.log(response.data);
-
-    response.data.forEach((data)=>{
-      showLeaderBoard(data);
-    })
-
-  }
-  else{
-    HideOrView.style.display="none";
-    leaderboardBtn.textContent="Show Leaderboard"; 
-  }
-}
-
 async function verify(isour) {
   console.log(isour.isour);
   if(isour.isour==="true"){
-    premiumFeature.style.display="block";
+    location.replace('/premium/table-page.html')
   }
-  else{
-    premiumFeature.style.display="none";
-
-    return;
-  }
-}
-
-function showLeaderBoard(data){
-openCount++;
-  let tr = document.createElement('tr');
-  let td1 = document.createElement('td');
-  let td2 = document.createElement('td');
-  td1.textContent=data.Username;
-  td2.textContent=data.TotalExpense;
-  tr.appendChild(td1);
-  tr.appendChild(td2);
-  leaderboardTable.appendChild(tr);
-
 }
 
 

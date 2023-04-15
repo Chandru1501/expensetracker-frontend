@@ -54,3 +54,10 @@ button{
 #HideOrView{
     display: none;
 }
+.showBydateBasis{
+    display: none;
+}
+#download{
+    float: right;
+    margin-right: 20px;
+}

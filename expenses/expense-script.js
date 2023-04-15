@@ -1,6 +1,8 @@
 var amount = document.querySelector("#amount");
+var income = document.querySelector('#income');
 var description = document.querySelector("#descriptioninput");
 var category = document.querySelector("#categoryinput");
+var date = document.querySelector('#dateInput');
 
 let list = document.querySelector("#items");
 
@@ -25,18 +27,26 @@ username.textContent = localStorage.getItem('username');
 
 function additem(event){
   event.preventDefault();
+  let dateformat = date.value.split("-").reverse().join("/");
+  let Income=income.value;
+  if(Income==""){
+    Income=0;
+  }
 myObj = {
     amount: amount.value,
+    income: Income,
+    date : dateformat,
     description: description.value,
     category: category.value,
 }
+console.log(myObj);
   postexpense(myObj);
   setTimeout(()=>{
     location.replace('./expense-table.html');
-  },600)
+    },400)
 }
 
-
+var isOur;
 async function postexpense(myObj){
   try{
     let token = localStorage.getItem('token');
@@ -118,7 +128,8 @@ document.addEventListener('DOMContentLoaded',( async function (){
   let token = localStorage.getItem('token');
 
   let response = await axios.get('http://localhost:8080/user/getdetails',{ headers : { "authorization" : token } });
-  // console.log(response.data);
+  console.log(response.data.isour);
+  isOur = response.data.isour;
   if(response.data.isour=='true'){
     tospacing.style.display="block";
     afterPremiumOptions.style.display="block";
