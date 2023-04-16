@@ -61,3 +61,14 @@ button{
     float: right;
     margin-right: 20px;
 }
+#olderdownloads{
+    float:right
+}
+#downloaddatadiv{
+    display: none;
+    float: right;
+    margin: 30px;
+}
+#downloadDataTable{
+    /* width:1000px; */
+}

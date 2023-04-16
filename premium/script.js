@@ -317,10 +317,6 @@ async function Monthly(Monthlydata){
     
 }
 }
-
-
-
-
 // let yearlyDiv = document.createElement('div');
 // yearlyDiv.className="Yearly_report";
 
@@ -342,4 +338,89 @@ async function Monthly(Monthlydata){
 // yearlyDiv.appendChild(Yearlytable);
 // tablediv.appendChild(yearlyDiv);
 
+//............................................download..................................
+let downloadBtn = document.querySelector('#download');
+
+downloadBtn.addEventListener('click',async()=>{
+  try{
+  let token = localStorage.getItem("token");
+  let response = await axios.get('http://localhost:8080/premium/download',{headers : {"authorization" : token}})
+  console.log(response);
+  var a = document.querySelector('a');
+  a.href =response.data;
+  a.download = "myexpense.csv";
+  a.click();
+  }
+  catch(err){
+    console.log(err);
+  }
+}
+
+)
+
+let olderDownloads = document.querySelector('#olderdownloads');
+let downloadTable = document.querySelector('#downloaddatadiv');
+let count=0;
+let clickCount =0;
+olderDownloads.addEventListener('click',()=>{
+  if(clickCount==0){
+    olderDownloads.textContent = "Hide Older Downloads";
+    downloadTable.style.display="block";
+    clickCount++;
+  }
+  else{
+    olderDownloads.textContent = "Older Downloads";
+    downloadTable.style.display="none";
+    clickCount=0;
+  }
+})
+
+olderDownloads.addEventListener('click',async()=>{
+  if(count>0){
+    return
+   }
+   else{
+  let token = localStorage.getItem('token');
+
+  let response = await axios.get('http://localhost:8080/premium/getdownloadlinks',{headers : {"authorization" : token}});
+   console.log(response.data.downloadData);
+   let downloaddata = response.data.downloadData;
+
+   let downloadDataTable = document.createElement('table');
+   downloadDataTable.id = "downloadDataTable";
+   downloadTable.appendChild(downloadDataTable);
+
+   let TRHead = document.createElement('tr');
+   let heading = ["Date","Your older Download files are here click download Button to Download"]
+   for(let i=0;i<=1;i++){
+     let thDownload = document.createElement('th');
+    thDownload.textContent =heading[i];
+    TRHead.appendChild(thDownload);
+   }
+  downloadDataTable.appendChild(TRHead);
+
+  downloaddata.forEach(data=>{
+    let thisData = {
+      Date : data.Date,
+      Link : data.DataLinks
+    }
+    console.log(thisData);
+    let TR = document.createElement('tr');
+      let td1 = document.createElement('td');
+      td1.textContent = thisData.Date;
+      TR.appendChild(td1);
+      let td2 = document.createElement("td");
+      let btn = document.createElement('button');
+      btn.className="btn btn-danger";
+      btn.textContent="Download"
+      btn.addEventListener('click',()=>{
+        location.replace(thisData.Link)
+      })
+      td2.appendChild(btn);
+      TR.appendChild(td2);
+    downloadDataTable.appendChild(TR);
+    count++;
+    })
+  }
+})
 
