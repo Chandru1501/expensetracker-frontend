@@ -73,6 +73,7 @@ let tablediv = document.querySelector('.showBydateBasis');
 let counting=0;
 let open=0;
 let ShowByDateBTN = document.querySelector('#showbydateBtn');
+
 ShowByDateBTN.addEventListener('click',()=>{
   console.log(UserTotalExpensesData);
   if(counting==0){
@@ -305,7 +306,14 @@ olderDownloads.addEventListener('click',async()=>{
 
 
 
-//..........................pagination...................................
+//..........................pagination......................................
+
+let rowsPerpage = document.querySelector('#rowsperpage');
+let rows;
+rowsPerpage.addEventListener('change',()=>{
+  rows = rowsPerpage.options[rowsPerpage.selectedIndex].textContent;
+  localStorage.setItem("RowsPerpage",rows)
+})
 
 window.addEventListener("DOMContentLoaded",showOnscreen)
 
@@ -383,8 +391,10 @@ async function getAllExpenses(PageNo){
   try{
     if(PageNo==undefined){
       let token = localStorage.getItem("token");
+      let rows = localStorage.getItem("RowsPerpage");
+      console.log(rows);
       console.log(token);
-    let response = await axios.get(`http://localhost:8080/user/get-expenses`,{ headers : { "authorization" : token } });
+    let response = await axios.get(`http://localhost:8080/user/get-expenses`,{ headers : { "authorization" : token ,"noofrows" : rows }});
     verify(response.data.headers);
     UserTotalExpensesData = response.data.expense;
     // console.log(response.data);
@@ -392,8 +402,10 @@ async function getAllExpenses(PageNo){
     }
     else{
       let token = localStorage.getItem("token");
+      let rows = localStorage.getItem("RowsPerpage");
       console.log(token);
-    let response = await axios.get(`http://localhost:8080/user/get-expenses?page=${PageNo}`,{ headers : { "authorization" : token } });
+      console.log(rows);
+    let response = await axios.get(`http://localhost:8080/user/get-expenses?page=${PageNo}`,{ headers : { "authorization" : token ,"noofrows" : rows }});
     verify(response.data.headers);
     UserTotalExpensesData = response.data.expense;
     return response.data;
@@ -471,3 +483,4 @@ async function Showpagination(pageData)  {
     displayitems(expense);
   })
  }
+ 
