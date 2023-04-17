@@ -69,6 +69,11 @@ button{
     float: right;
     margin: 30px;
 }
-#downloadDataTable{
-    /* width:1000px; */
+.pagination{
+    width: 200px; 
+    margin-left: auto;
+    margin-right: auto;
+}
+#current{
+    height: 80px;
 }
