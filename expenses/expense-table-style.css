@@ -54,3 +54,16 @@ button{
 #HideOrView{
     display: none;
 }
+.pagination{
+    width: 100px; 
+    margin-left: auto;
+    margin-right: auto;
+}
+#current{
+    height: 80px;
+}
+#NoOfDataperpage{
+ /* border: 2px solid;  */
+   color:azure;
+     margin-left: 20px; 
+}

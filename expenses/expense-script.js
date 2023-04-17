@@ -126,7 +126,6 @@ let afterPremiumOptions = document.querySelector('.afterPremium');
 document.addEventListener('DOMContentLoaded',( async function (){
 
   let token = localStorage.getItem('token');
-
   let response = await axios.get('http://localhost:8080/user/getdetails',{ headers : { "authorization" : token } });
   console.log(response.data.isour);
   isOur = response.data.isour;
