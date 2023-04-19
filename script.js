@@ -14,6 +14,11 @@ let userFound = document.querySelector('#userFound');
 btn.addEventListener('click',()=>{
 userFound.style.display="none";
 })
+
+let forms  = document.querySelector('form');
+
+forms.onsubmit = addUser;
+
 function addUser(event){
     event.preventDefault();
 let myObj = {
@@ -27,11 +32,11 @@ postUser(myObj);
 }
 
 async function postUser(myObj){
- axios.post("http://localhost:8080/user/add-user",myObj)
+  console.log(myObj);
+ axios.post("https://18.212.23.246:8080/user/add-user",myObj)
  .then((response)=>{
     console.log(response);
-    location.replace("/Login.html");
- })
+    location.replace('https://18.212.23.246:8080/login.html') })
  .catch((err)=>{
   console.log(err.response.status);
   if(err.response.status==409){
@@ -59,8 +64,13 @@ Loginbtn.addEventListener('click',()=>{
     UserNotFound.style.display="none";
 })
 
+let form  = document.querySelector('form');
+
+form.onsubmit = login
+
 function login(event){
-    event.preventDefault();
+  console.log('login function called');
+  event.preventDefault();
   let myLogin = {
     email : userEmail.value,
     password : userPassword.value 
@@ -70,23 +80,22 @@ console.log(myLogin);
 }
 
 async function userLogin(myLogin){
-axios.post('http://localhost:8080/user/login',myLogin)
+axios.post('https://18.212.23.246:8080/user/login',myLogin)
 .then((response)=>{
     console.log(response);
     if(response.data.status=="login Successfull"){
         if(localStorage.getItem("token")==null && localStorage.getItem('username')==null){
             localStorage.setItem("token",response.data.token)
             localStorage.setItem("username",response.data.username)
-            location.replace('./expenses/expense.html')
+            location.replace('https://18.212.23.246:8080/expensetracker-frontend/expenses/expense.html')
         }
         else{
            localStorage.removeItem("token");
            localStorage.removeItem('username');
            localStorage.setItem("token",response.data.token)
            localStorage.setItem("username",response.data.username)
-           location.replace('./expenses/expense.html')
-        }
-        
+          location.replace('https://18.212.23.246:8080/expensetracker-frontend/expenses/expense.html')
+        }    
     }
 })
 .catch((err)=>{
@@ -103,12 +112,16 @@ axios.post('http://localhost:8080/user/login',myLogin)
 
 }
 
-else if (type.textContent==="Forgot Password"){
+else if (type.textContent==="Forgot Password")  {
 //................................Reset Password..........................................
 
 let resetBtn = document.querySelector('#resetBtn');
 let EmailReset = document.querySelector('#emailReset');
 let resetUserNotFound = document.querySelector('#resetUserNotFound');
+
+let form  = document.querySelector('form');
+
+form.onsubmit = resetPw;
 
 function resetPw(event)  {
     event.preventDefault();
@@ -126,7 +139,7 @@ function resetPw(event)  {
 
 async function postNow(resetemail){
   try{
-  let response = await axios.post('http://localhost:8080/password/forgotpassword',resetemail)
+  let response = await axios.post('https://18.212.23.246:8080/password/forgotpassword',resetemail)
   console.log(response);
       alert("Password reseting link has been sent to your mail ID");
   }

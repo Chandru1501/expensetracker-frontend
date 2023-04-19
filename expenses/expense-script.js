@@ -24,8 +24,11 @@ categoryChoose.addEventListener("change",() =>{
 var username = document.querySelector('name');
 username.textContent = localStorage.getItem('username');
 
+let form  = document.querySelector('form');
 
-function additem(event){
+form.onsubmit = additem;
+
+async function additem(event){
   event.preventDefault();
   let dateformat = date.value.split("-").reverse().join("/");
   let Income=income.value;
@@ -40,10 +43,13 @@ myObj = {
     category: category.value,
 }
 console.log(myObj);
-  postexpense(myObj);
-  setTimeout(()=>{
-    location.replace('./expense-table.html');
-    },400)
+ let res = await postexpense(myObj);
+ if(res){
+     location.replace('./expense-table.html');
+  }
+  else{
+    alert("somthing went wrong")
+  }
 }
 
 var isOur;
@@ -51,8 +57,9 @@ async function postexpense(myObj){
   try{
     let token = localStorage.getItem('token');
     console.log(token);
-  let response = await axios.post('http://localhost:8080/user/add-expense',myObj,{ headers : {"authorization" : token } })
+  let response = await axios.post('https://18.212.23.246:8080/user/add-expense',myObj,{ headers : {"authorization" : token } })
   console.log("posted");
+  return response;
   }
   catch(err){
     console.log(err);
@@ -63,7 +70,7 @@ async function postexpense(myObj){
 
 document.querySelector('#rzp-button1').onclick = async function(){
   let token = localStorage.getItem('token');
-  let response = await axios.get('http://localhost:8080/purchase/premiummembership',{ headers : { "authorization" : token } });
+  let response = await axios.get('https://18.212.23.246:8080/purchase/premiummembership',{ headers : { "authorization" : token } });
   console.log(response);
 
   var options = {
@@ -73,8 +80,8 @@ document.querySelector('#rzp-button1').onclick = async function(){
     "handler": async function (response) {
   
       alert("you are our premium user");
-      location.reload();
-      await axios.post('http://localhost:8080/purchase/updatetransactionstatus',{
+      //  location.reload();
+      await axios.post('https://18.212.23.246:8080/purchase/updatetransactionstatus',{
         payment_Id : response.razorpay_payment_id,
         order_Id : options.order_id
       },
@@ -95,7 +102,7 @@ document.querySelector('#rzp-button1').onclick = async function(){
 rzp1.on('payment.failed', async function (response){
   console.log(response.error.metadata);
         alert("somthing went wrong");
-       await axios.post('http://localhost:8080/purchase/updatefailurestatus',{
+       await axios.post('https://18.212.23.246:8080/purchase/updatefailurestatus',{
         order_Id : response.error.metadata.order_id,
         payment_Id : response.error.metadata.payment_id
       },
@@ -126,7 +133,7 @@ let afterPremiumOptions = document.querySelector('.afterPremium');
 document.addEventListener('DOMContentLoaded',( async function (){
 
   let token = localStorage.getItem('token');
-  let response = await axios.get('http://localhost:8080/user/getdetails',{ headers : { "authorization" : token } });
+  let response = await axios.get('https://18.212.23.246:8080/user/getdetails',{ headers : { "authorization" : token } });
   console.log(response.data.isour);
   isOur = response.data.isour;
   if(response.data.isour=='true'){

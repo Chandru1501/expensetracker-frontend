@@ -255,7 +255,24 @@ olderDownloads.addEventListener('click',()=>{
   }
 })
 
+let olderDownloadsclick=0;
+
 olderDownloads.addEventListener('click',async()=>{
+  if(olderDownloadsclick==0){
+    let downloadDataTable = document.createElement('table');
+    downloadDataTable.id = "downloadDataTable";
+  downloadTable.appendChild(downloadDataTable);
+
+    let TRHead = document.createElement('tr');
+    let heading = ["Date","Your older Download files are here click download Button to Download"]
+    for(let i=0;i<=1;i++){
+      let thDownload = document.createElement('th');
+      thDownload.textContent =heading[i];
+      TRHead.appendChild(thDownload);
+    }
+    downloadDataTable.appendChild(TRHead);
+    olderDownloadsclick++;
+  }
   if(count>0){
     return
   }
@@ -265,19 +282,6 @@ olderDownloads.addEventListener('click',async()=>{
     let response = await axios.get('http://localhost:8080/premium/getdownloadlinks',{headers : {"authorization" : token}});
     console.log(response.data.downloadData);
     let downloaddata = response.data.downloadData;
-    
-    let downloadDataTable = document.createElement('table');
-    downloadDataTable.id = "downloadDataTable";
-  downloadTable.appendChild(downloadDataTable);
-  
-  let TRHead = document.createElement('tr');
-  let heading = ["Date","Your older Download files are here click download Button to Download"]
-  for(let i=0;i<=1;i++){
-    let thDownload = document.createElement('th');
-    thDownload.textContent =heading[i];
-    TRHead.appendChild(thDownload);
-  }
-  downloadDataTable.appendChild(TRHead);
   
   downloaddata.forEach(data=>{
     let thisData = {
@@ -392,6 +396,9 @@ async function getAllExpenses(PageNo){
     if(PageNo==undefined){
       let token = localStorage.getItem("token");
       let rows = localStorage.getItem("RowsPerpage");
+      if(rows==null || rows==undefined){
+        rows=10;
+      }
       console.log(rows);
       console.log(token);
     let response = await axios.get(`http://localhost:8080/user/get-expenses`,{ headers : { "authorization" : token ,"noofrows" : rows }});
@@ -403,6 +410,9 @@ async function getAllExpenses(PageNo){
     else{
       let token = localStorage.getItem("token");
       let rows = localStorage.getItem("RowsPerpage");
+      if(rows==null || rows==undefined){
+        rows=10;
+      }
       console.log(token);
       console.log(rows);
     let response = await axios.get(`http://localhost:8080/user/get-expenses?page=${PageNo}`,{ headers : { "authorization" : token ,"noofrows" : rows }});

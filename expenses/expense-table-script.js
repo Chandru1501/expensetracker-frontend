@@ -92,14 +92,14 @@ async function showOnscreen() {
 async function getAllExpenses(PageNo){
   try{
     let rows = localStorage.getItem("RowsPerpage");
-    if(rows==null){
+    if(rows==null || rows==undefined){
       rows=10
     }
     if(PageNo==undefined){
       let token = localStorage.getItem("token");
       console.log(rows);
       console.log(token);
-    let response = await axios.get(`http://localhost:8080/user/get-expenses`,{ headers : { "authorization" : token ,"noofrows" : rows }});
+    let response = await axios.get(`https://18.212.23.246:8080/user/get-expenses`,{ headers : { "authorization" : token ,"noofrows" : rows }});
     verify(response.data.headers);
     UserTotalExpensesData = response.data.expense;
     console.log(response.data);
@@ -108,12 +108,12 @@ async function getAllExpenses(PageNo){
     else{
       let token = localStorage.getItem("token");
       let rows = localStorage.getItem("RowsPerpage");
-      if(rows==null){
+      if(rows==null || rows==undefined){
         rows=10
       }
       console.log(token);
       console.log(rows);
-    let response = await axios.get(`http://localhost:8080/user/get-expenses?page=${PageNo}`,{ headers : { "authorization" : token ,"noofrows" : rows }});
+    let response = await axios.get(`https://18.212.23.246:8080/user/get-expenses?page=${PageNo}`,{ headers : { "authorization" : token ,"noofrows" : rows }});
     verify(response.data.headers);
     UserTotalExpensesData = response.data.expense;
     return response.data;
@@ -129,7 +129,7 @@ async function deleteExpense(expenseid){
   try{
   let token = localStorage.getItem("token");
   console.log(token);
-  let response = await axios.get(`http://localhost:8080/user/delete-expense/${expenseid}`,{ headers : { "authorization" : token } });
+  let response = await axios.get(`https://18.212.23.246:8080/user/delete-expense/${expenseid}`,{ headers : { "authorization" : token } });
   console.log(`${id} deleted`);
   }
   catch(err){
